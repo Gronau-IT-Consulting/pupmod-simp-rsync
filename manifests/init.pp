@@ -41,6 +41,13 @@ class rsync (
     purge  => true
   }
 
+  if $facts['os']['name'] in ['Debian','Ubuntu'] {
+    # rsync package includes an rsync service -> disable
+    service { 'rsync':
+      ensure => 'stopped',
+      enable => false
+    }
+  }
 
   if $facts['selinux_current_mode'] and $facts['selinux_current_mode'] != 'disabled' {
     include rsync::selinux
